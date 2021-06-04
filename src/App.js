@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "./services/api";
 import "./styles.css";
+import Faker from "faker";
 
 function App() {
   const [repositories, setRepositories] = useState([]);
@@ -9,19 +10,49 @@ function App() {
       setRepositories(response.data);
     });
   }, []);
+
   async function handleAddRepository() {
     const response = await api.post("repositories", {
-      title: "GoStack " + Date.now(),
-      url: "https://github.com/",
-      techs: ["React", "Javascript", "VSCode"],
+      title: Faker.commerce.productName(),
+      url: Faker.internet.url(),
+      techs: Faker.random.arrayElements(
+        [
+          "FORTRAN",
+          "ALGOL",
+          "Newspeak",
+          "D",
+          "Prolog",
+          "Simula",
+          "JavaScript",
+          "Java",
+          "C#",
+          "Clojure",
+          "COBOL",
+          "Lua",
+          "Smalltalk",
+          "Swift",
+          "Ruby",
+          "Lisp",
+          "Scala",
+          "C",
+          "Python",
+          "Scheme",
+          "Fortress",
+          "C++",
+          "Go",
+          "Perl",
+          "Haskell",
+        ],
+        3
+      ),
     });
+
     const repository = response.data;
 
     setRepositories([...repositories, repository]);
   }
 
   async function handleRemoveRepository(id) {
-    // const response = await api.delete();
     await api.delete(`repositories/${id}`);
     const newRepositories = repositories.filter((item) => item.id != id);
     setRepositories(newRepositories);
